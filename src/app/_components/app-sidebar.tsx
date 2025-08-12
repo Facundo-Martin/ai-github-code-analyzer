@@ -103,18 +103,20 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
-              <SidebarMenuItem>
-                <Link href="/create">
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="mt-2 w-fit cursor-pointer"
-                  >
-                    <Plus />
-                    Create project
-                  </Button>
-                </Link>
-              </SidebarMenuItem>
+              {open && (
+                <SidebarMenuItem>
+                  <Link href="/create">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="mt-2 w-fit cursor-pointer"
+                    >
+                      <Plus />
+                      Create project
+                    </Button>
+                  </Link>
+                </SidebarMenuItem>
+              )}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
