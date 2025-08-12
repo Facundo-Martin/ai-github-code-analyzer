@@ -31,4 +31,43 @@ model User {
     phoneNumber String? @unique
 
     credits Int @default(150)
+    
+    userToProjects userToProject[]
+}
+
+model Project {
+    id        String @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now())
+
+    name String
+    githubUrl String
+    githubToken String?
+
+    deletedAt DateTime?
+    
+    userToProjects userToProject[]
+}
+
+enum ProjectRole {
+  OWNER
+  ADMIN
+  MEMBER
+  VIEWER
+}
+model userToProject {
+    id String @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now())
+    
+    userId String
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    
+    projectId String
+    project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+    
+    role ProjectRole @default(MEMBER) 
+    joinedAt DateTime @default(now())
+    
+    @@unique([userId, projectId])
 }
