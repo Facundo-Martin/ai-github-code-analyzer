@@ -12,7 +12,19 @@ export const projectRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      console.log("input:", input);
-      return true;
+      const project = await ctx.db.project.create({
+        data: {
+          githubUrl: input.repoUrl,
+          name: input.projectName,
+          githubToken: input.githubToken,
+          userToProjects: {
+            create: {
+              // TODO: Fix this assertion, userId should always be typed as string in protectedProcedures...!
+              userId: ctx.user.userId!,
+            },
+          },
+        },
+      });
+      return project;
     }),
 });
