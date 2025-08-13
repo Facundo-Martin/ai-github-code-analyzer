@@ -19,8 +19,7 @@ export const projectRouter = createTRPCRouter({
           githubToken: input.githubToken,
           userToProjects: {
             create: {
-              // TODO: Fix this assertion, userId should always be typed as string in protectedProcedures...!
-              userId: ctx.user.userId!,
+              userId: ctx.user.userId,
             },
           },
         },

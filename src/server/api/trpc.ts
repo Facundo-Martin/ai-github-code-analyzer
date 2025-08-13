@@ -100,7 +100,7 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
 
 const isAuthenticated = t.middleware(async ({ next, ctx }) => {
   const user = await auth();
-  if (!user) {
+  if (!user || !user.userId) {
     throw new TRPCError({
       code: "UNAUTHORIZED",
       message: "You must be logged in to access this resource",
