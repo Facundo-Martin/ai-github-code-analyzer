@@ -50,7 +50,7 @@ export function AppSidebar() {
       {/* TODO: Create logo */}
       <SidebarHeader>
         <div className="flex items-center gap-2">
-          <Image src="" alt="logo" width={40} height={40} />
+          <Image src="/logo.png" alt="logo" width={40} height={40} />
           {open && (
             <h1 className="text-primary/80 text-xl font-bold">Dionysus</h1>
           )}
