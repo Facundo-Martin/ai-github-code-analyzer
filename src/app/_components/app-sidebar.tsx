@@ -27,6 +27,7 @@ import {
 } from "~/components/ui/sidebar";
 import { Button } from "~/components/ui/button";
 import Image from "next/image";
+import { useProjects } from "~/hooks/use-projects";
 
 const NAVIGATION_ITEMS = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
@@ -35,15 +36,12 @@ const NAVIGATION_ITEMS = [
   { title: "Billing", url: "/billing", icon: CreditCard },
 ] as const;
 
-const DUMMY_PROJECTS = [
-  { name: "Project 1" },
-  { name: "Project 2" },
-  { name: "Project 3" },
-] as const;
-
 export function AppSidebar() {
   const pathname = usePathname();
   const { open } = useSidebar();
+
+  const { projects, selectedProject, selectedProjectId, setSelectedProjectId } =
+    useProjects();
 
   return (
     <Sidebar collapsible="icon" variant="floating">
@@ -83,16 +81,21 @@ export function AppSidebar() {
           <SidebarGroupLabel>Your Projects</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {DUMMY_PROJECTS.map((project) => (
+              {projects?.map((project) => (
                 <SidebarMenuItem key={project.name}>
                   <SidebarMenuButton asChild>
-                    <div>
+                    <div
+                      className="cursor-pointer"
+                      onClick={() => setSelectedProjectId(project.id)}
+                    >
                       {/* TODO: Update this once I have created my db model */}
                       <div
                         className={cn(
                           "text-primary flex size-6 items-center justify-center rounded-sm border bg-white text-sm",
+                          // TODO: Update this with dynamic project routes + depracate localStorage
                           {
-                            "bg-primary text-white": false,
+                            "bg-primary text-white":
+                              project.id === selectedProjectId,
                           },
                         )}
                       >
