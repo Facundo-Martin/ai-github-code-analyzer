@@ -2,51 +2,52 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Post {
-    id        Int      @id @default(autoincrement())                   
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    @@index([name])
+  @@index([name])
 }
 
 model User {
-    id        String @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    imageUrl String?
-    firstName String?
-    lastName String?
-    emailAddress String? @unique
-    phoneNumber String? @unique
+  imageUrl     String?
+  firstName    String?
+  lastName     String?
+  emailAddress String? @unique
+  phoneNumber  String? @unique
 
-    credits Int @default(150)
-    
-    userToProjects userToProject[]
+  credits Int @default(150)
+
+  userToProjects userToProject[]
 }
 
 model Project {
-    id        String @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    name String
-    githubUrl String
-    githubToken String?
+  name        String
+  githubUrl   String
+  githubToken String?
 
-    deletedAt DateTime?
-    
-    userToProjects userToProject[]
+  deletedAt DateTime?
+
+  userToProjects userToProject[]
+  Commit         Commit[]
 }
 
 enum ProjectRole {
@@ -55,19 +56,45 @@ enum ProjectRole {
   MEMBER
   VIEWER
 }
+
 model userToProject {
-    id String @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @default(now())
-    
-    userId String
-    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-    
-    projectId String
-    project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
-    
-    role ProjectRole @default(MEMBER) 
-    joinedAt DateTime @default(now())
-    
-    @@unique([userId, projectId])
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  role     ProjectRole @default(MEMBER)
+  joinedAt DateTime    @default(now())
+  Commit   Commit?     @relation(fields: [commitId], references: [id])
+  commitId String?
+
+  @@unique([userId, projectId])
+}
+
+model Commit {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  projectId    String
+  project      Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  mesage String
+  hash   String
+  authorName String
+  authorAvatarUrl String
+  date DateTime
+
+  /// AI-generated commit summary
+  summary String
+  
+
+  credits Int @default(150)
+
+  userToProjects userToProject[]
 }
